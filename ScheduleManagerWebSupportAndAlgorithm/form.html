@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+	<body class = "background">
+		<head>
+			<link href="./normalize.css" rel="stylesheet">
+ 
+    		<link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+    		<link rel="stylesheet" href="./calendarcss.css">
+			
+			<meta charset="UTF-8">
+			<link rel="stylesheet" href="/css/master.css" media="screen" title="no title" charset="utf-8">
+
+			 <meta name="viewport" content="width=device-width, initial-scale=1">
+			<title>Registration Page</title>
+		</head>
+		<div>
+		<h2>
+			<form action="http://6984cbbd.ngrok.io/ScheduleManager/schedman_input.php" class = "jumbotron" method="POST"> <!--Sends form to a php file for server to handle firstname and lastname variables-->
+  			<fieldset>
+    		<legend>Classes to Register for (Pl. enter in form of *course name*/*days*/*timing*/*Prof.*) </legend>
+    			Class 1:<br>
+    		<input type="text" id="Class1" name="Class1" value=""> 
+    			<br>
+    			Class 2:<br>
+    		<input type="text"  id="Class2"  name="Class2" value="">
+    			<br>
+    			Class 3:<br>
+    		<input type="text"  id="Class3"  name="Class3" value="">
+    			<br>
+    			Class 4:<br>
+    		<input type="text"  id="Class4"  name="Class4" value="">
+    			<br>
+    		<input type="submit" value="Submit">
+  			</fieldset>
+			</form>
+		</h2>
+		</div>
+
+
+
+		</body>
+</html>

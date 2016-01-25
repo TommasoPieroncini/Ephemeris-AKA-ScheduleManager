@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_settings_sched" android:title="@string/action_settings"
+        android:orderInCategory="400" app:showAsAction="never" />
+    <item android:id="@+id/schedule1" android:title="Schedule 1"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/schedule2" android:title="Schedule 2"
+        android:orderInCategory="200" app:showAsAction="never"/>
+    <item android:id= "@+id/schedule3" android:title="Schedule 3"
+        android:orderInCategory="300" app:showAsAction="never"/>
+</menu>

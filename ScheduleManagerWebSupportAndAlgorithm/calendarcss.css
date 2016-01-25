@@ -1,0 +1,30 @@
+h4{
+	color: blue;
+}
+
+body.background{
+	background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MlUiZgPzUFznIYKSVaJsY7wncs_rIN8zBOsp1fD_GpVQ9_AuxvTettN1"); 
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+p.efficientdesc{
+	color: red;
+}
+
+div.spacing{
+	padding: 1px 2px;
+	font-size: 15px;
+	border-top: 4px;
+}
+
+div.none{
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARMAAAC3CAMAAAAGjUrGAAAAA1BMVEX///+nxBvIAAAAR0lEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPBgxUwAAU+n3sIAAAAASUVORK5CYII=);
+	background-size: cover;
+}
+
+
+div.boxed {
+  border: 3px solid grey ;
+padding: 50px 50px 50px 50px
+}
