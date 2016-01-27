@@ -66,6 +66,13 @@ public class Course {
                     if (other.getTime().equals(this.getTime())) {
                         return false;
                     }
+//                    String othertimestart = other.getTime().substring(0, other.getTime().indexOf("-"));
+//                    String othertimeend = other.getTime().substring(other.getTime().indexOf("-") + 1);
+//                    String thistimestart = this.getTime().substring(0, other.getTime().indexOf("-"));
+//                    String thistimeend = this.getTime().substring(other.getTime().indexOf("-") + 1);
+////                    if (Integer.parseInt(other.getTime().substring(0, other.getTime().indexOf(":")))) {
+////
+////                    }
                 }
             }
         }

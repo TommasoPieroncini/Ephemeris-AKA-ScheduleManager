@@ -18,7 +18,8 @@ public class scheduleGenerator {
     public static List<Course> database = new ArrayList<Course>();
     public static ArrayList<Course> options = new ArrayList<Course>();
     public static List<Course[]> schedules = new ArrayList<Course[]>();
-    public static List<Course[]> schedules2 = new ArrayList<Course[]>();
+    public static List<ArrayList<Course>> schedules2 = new ArrayList<ArrayList<Course>>();
+    public static List<Course[]> schedules3 = new ArrayList<Course[]>();
     public static Course[] tester;
     public static int classes;
     public static int test;
@@ -26,24 +27,24 @@ public class scheduleGenerator {
     public static int notavailables;
 
 
-    public static void main(String[] args) throws FileNotFoundException, IOException{
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         classes = args.length;
         String line;
-        int[] list= new int[3];
+        int[] list = new int[3];
         for (int i = 0; i < classes; i++) {
             line = args[i];
             list[0] = line.indexOf("/");
             list[1] = line.indexOf("/", list[0] + 1);
             list[2] = line.indexOf("/", list[1] + 1);
-            courses.add(new Course(line.substring(0,list[0]), line.substring(list[0] + 1, list[1]),
+            courses.add(new Course(line.substring(0, list[0]), line.substring(list[0] + 1, list[1]),
                     line.substring(list[1] + 1, list[2]), line.substring(list[2] + 1), true, 0));
         }
         String line2 = "";
         try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while((line2 = bufferedReader.readLine()) != null) {
-                int[] list2= new int[4];
+            while ((line2 = bufferedReader.readLine()) != null) {
+                int[] list2 = new int[4];
                 list2[0] = line2.indexOf("/");
                 list2[1] = line2.indexOf("/", list2[0] + 1);
                 list2[2] = line2.indexOf("/", list2[1] + 1);
@@ -135,120 +136,35 @@ public class scheduleGenerator {
             }
         }
 
-//        Course[] option = options.toArray(new Course[options.size()]);
-//        Combination a = new Combination();
-//        int[][] posibilities = a.combination(option, classes);
-//        Course[] testers = new Course[classes];
-//        System.out.println(posibilities.length);
-//        System.out.println(posibilities[1].length);
-//
-//        for (int i = 0; i < posibilities.length; i++) {
-//            for (int j = 0; j < posibilities[i].length; j++) {
-//                System.out.println(posibilities[i][j]);
-//            }
-//            System.out.println("_____");
-//        }
+        Combination a = new Combination();
+        Combination.combination(options.size(), classes);
+        ArrayList<int[]> c = a.thelist;
+        Course[] temporal = new Course[classes];
 
-//        for (int i = 0; i < posibilities.size(); i++) {
-//                for (int k = i; k < posibilities.get(i).length; k++) {
-//                    testers[k] = options.get(posibilities.get(i)[k]);
-//                }
-//                schedules.add(testers);
-//
-//        }
-//
-//        for (int i = 0; i < schedules.size(); i++) {
-//                for (int c = 0; c < schedules.get(i).length; c++) {
-//                    for (int b = c; b < schedules.get(i).length; b++) {
-//                        if (!schedules.get(i)[c].checkAvailability(schedules.get(i)[b])) {
-//                            schedules.remove(i);
-//                        }
-//                    }
-//                System.out.println(schedules.get(i)[c]);
-//            }
-//            System.out.println("-------");
-//        }
-
-
-//        combinationUtil combi = new combinationUtil();
-//        Course[] option = options.toArray(new Course[options.size()]);
-//        schedules = combi.combinationUtils(option, new Course[options.size() + 1], 0, option.length, 0, classes);
-//
-//        schedules2 = schedules;
-//
-//        for (int i = 0; i < schedules2.size(); i++) {
-//            for (int j = 0; j < schedules2.get(i).length; j++) {
-//                for (int k = j + 1; k < schedules2.get(i).length; k++) {
-//                    if (!schedules2.get(i)[j].checkAvailability(schedules2.get(i)[k])) {
-//                        schedules.remove(schedules2.get(i)[j]);
-//                    }
-//                }
-//            }
-//        }
-//
-//        for (int i = 0; i < schedules.size(); i++) {
-//            for (int j = 0; j < schedules.get(i).length; j++) {
-//                System.out.println(schedules.get(i)[j]);
-//            }
-//            System.out.println("::::::::::::");
-//        }
-
-        for (int i = 0; i < options.size(); i++) {
-            for (int a = 0; a < options.size(); a++) {
-                options.get(a).setAvailable(true);
+        for (int i = 0; i < c.size(); i++) {
+            for (int j = 0; j < c.get(i).length; j++) {
+                temporal[j] = options.get(c.get(i)[j]);
             }
-            notavailables = 0;
-            schedulenumber = 0;
-            tester = new Course[args.length];
-            tester[0] = options.get(0);
-            test = 1;
-            for (int j = 0; j < options.size(); j++) {
-                possschedules(i, j);
-            }
-            options.remove(0);
-        }
-
-        for (int i = 0; i < schedules.size(); i++) {
-            for (int j = 0; j < schedules.get(i).length; j++) {
-                System.out.print(schedules.get(i)[j] + "?");
-            }
-            if (i < schedules.size() - 1) {
-                System.out.print("-------");
-            }
-        }
-        System.out.println();
-    }
-
-    public static void schedulecombinations () {}
-
-
-
-
-    public static void possschedules(int j, int factor) {
-        if (test == classes) {
-            if (!schedules.contains(tester)) {
-                schedules.add(tester);
-                factor++;
-            }
-        } else if (test < classes) {
-            if (j < options.size()) {
-                for (int k = j + factor; k < options.size(); k++) {
-                    boolean temporal = true;
-                    for (int i = 0; i < test; i++) {
-                        if (!tester[i].checkAvailability(options.get(k))) {
-                            temporal = false;
-                            factor++;
-                        }
-                    }
-                    if (temporal) {
-                        tester[test] = options.get(k);
-                        test ++;
-                        factor++;
-                        possschedules(j + 1, factor);
+            Course[] temporal4 = new Course[classes];
+            boolean add = true;
+            for (int k = 0; k < classes; k++) {
+                temporal4[k] = temporal[k];
+                for (int l = 0; l < k; l++) {
+                    if (!temporal4[l].checkAvailability(temporal4[k])) {
+                        add = false;
                     }
                 }
             }
+            if (add) {
+                schedules3.add(temporal4);
+            }
+        }
 
+        for (int i = 0; i < schedules3.size(); i++) {
+            for (int j = 0; j < schedules3.get(i).length; j++) {
+                System.out.println(schedules3.get(i)[j]);
+            }
+            System.out.println("__________");
         }
     }
 }
