@@ -13,21 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +32,6 @@ public class LoginActivity extends ActionBarActivity {
     EditText username;
     EditText password;
     Button login;
-    List<NameValuePair> authentificationData;
     String inputUsername;
     String inputPassword;
     String access;
@@ -52,7 +46,6 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        authentificationData = new ArrayList<>();
         recoverIntent = getIntent();
         recoverBundle = recoverIntent.getExtras();
         if (recoverBundle != null){
@@ -86,13 +79,12 @@ public class LoginActivity extends ActionBarActivity {
         if (authentificationFromStorage != null){
             inputUsername = authentificationFromStorage[0];
             inputPassword = authentificationFromStorage[1];
-            authentificationData.add(new BasicNameValuePair("username",inputUsername));
-            authentificationData.add(new BasicNameValuePair("password",inputPassword));
+            //authentificationData.add(new BasicNameValuePair("username",inputUsername));
+            //authentificationData.add(new BasicNameValuePair("password",inputPassword));
             try{
                 Log.e("log_tag12","gettingPermission");
-                access = new getPermission().execute(authentificationData).get();
+                access = new getPermission().execute(inputUsername, inputPassword).get();
                 //Toast.makeText(getApplicationContext(), access, Toast.LENGTH_LONG).show();
-                access = "allowed";
                 Log.e("log_tag13","gotPermission");
             } catch (Exception e){
                 Log.e("log_tag5","FAILED TO GET PERMISSION RESPONSE" + e);
@@ -125,11 +117,11 @@ public class LoginActivity extends ActionBarActivity {
             public void onClick(View v) {
                 inputUsername = username.getText().toString();
                 inputPassword = password.getText().toString();
-                authentificationData.add(new BasicNameValuePair("username",inputUsername));
-                authentificationData.add(new BasicNameValuePair("password",inputPassword));
+                //authentificationData.add(new BasicNameValuePair("username",inputUsername));
+                //authentificationData.add(new BasicNameValuePair("password",inputPassword));
 
                 try{
-                    access = new getPermission().execute(authentificationData).get();
+                    access = new getPermission().execute(inputUsername, inputPassword).get();
                 } catch (Exception e){
                     Log.e("log_tag5","FAILED TO GET PERMISSION RESPONSE" + e);
                 }
@@ -157,22 +149,28 @@ public class LoginActivity extends ActionBarActivity {
         });
     }
 
-    class getPermission extends AsyncTask<List<NameValuePair>, Void, String> {
+    class getPermission extends AsyncTask<String, Void, String> {
 
 
         @Override
-        protected String doInBackground(List<NameValuePair>... authentificationData) {
+        protected String doInBackground(String... authdata) {
             String answer;
             InputStream is = null;
             BufferedReader br = null;
             StringBuilder sb = new StringBuilder();
             try {
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("http://6984cbbd.ngrok.io/ScheduleManager/schedman_login.php");
-                httpPost.setEntity(new UrlEncodedFormEntity(authentificationData[0]));
-                HttpResponse response = httpClient.execute(httpPost);
-                HttpEntity entity = response.getEntity();
-                is = entity.getContent();
+                URL url = new URL("http://128.61.104.186/ScheduleManager/schedman_login.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                OutputStream out = new BufferedOutputStream(conn.getOutputStream());
+                String message = "username="+authdata[0]+"&password="+authdata[1];
+                out.write(message.getBytes());
+                out.flush();
+                out.close();
+                is = conn.getInputStream();
+                int responseCode = conn.getResponseCode();
+                Log.i("log_tag", "POST Response Code :: " + responseCode);
             } catch (Exception e) {
                 Log.e("log_tag2", "CONNECTION FAILED in Login Activity: " + e);
             }

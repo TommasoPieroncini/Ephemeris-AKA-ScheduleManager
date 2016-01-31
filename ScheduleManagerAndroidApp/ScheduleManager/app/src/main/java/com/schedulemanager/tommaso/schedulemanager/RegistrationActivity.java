@@ -13,20 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +32,6 @@ public class RegistrationActivity extends ActionBarActivity {
     EditText password;
     EditText password2;
     Button register;
-    List<NameValuePair> inputData;
     String inputEmail;
     String inputUsername;
     String inputPassword;
@@ -56,7 +50,6 @@ public class RegistrationActivity extends ActionBarActivity {
         password2 = (EditText) findViewById(R.id.editText4);
         register = (Button) findViewById(R.id.button);
         goToLogin = (Button) findViewById(R.id.button4);
-        inputData = new ArrayList<>();
         intent = new Intent(this, LoginActivity.class);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +60,8 @@ public class RegistrationActivity extends ActionBarActivity {
                 inputPassword2 = password2.getText().toString();
                 if (inputPassword.equals(inputPassword2)) {
                     if (inputEmail.contains("@")) {
-                        inputData.add(new BasicNameValuePair("email", inputEmail));
-                        inputData.add(new BasicNameValuePair("username", inputUsername));
-                        inputData.add(new BasicNameValuePair("password", inputPassword));
                         try {
-                            serverResponse = new sendData().execute(inputData).get().toString();
+                            serverResponse = new sendData().execute(inputEmail,inputUsername,inputPassword).get().toString();
                         } catch (Exception e) {
                             Log.e("log_tag3", "FAILED TO GET RESPONSE FROM sendData");
                         }
@@ -86,7 +76,7 @@ public class RegistrationActivity extends ActionBarActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
+                        Log.e("serverresponse", serverResponse);
                         if (serverResponse.equals("Thank you for registering!")) {
                             startActivity(intent);
                         } else {
@@ -130,20 +120,26 @@ public class RegistrationActivity extends ActionBarActivity {
     }
 }
 
-class sendData extends AsyncTask<List<NameValuePair>,Void,String> {
+class sendData extends AsyncTask<String,Void,String> {
     @Override
-    protected String doInBackground(List<NameValuePair>... inputData) {
+    protected String doInBackground(String... inputData) {
         String serverResponse;
         InputStream is = null;
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
         try {
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://6984cbbd.ngrok.io/ScheduleManager/schedman_registration.php");
-            httpPost.setEntity(new UrlEncodedFormEntity(inputData[0]));
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            HttpEntity responseEntity = httpResponse.getEntity();
-            is = responseEntity.getContent();
+            URL url = new URL("http://128.61.104.186/ScheduleManager/schedman_registration.php");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            OutputStream out = new BufferedOutputStream(conn.getOutputStream());
+            String message = "email=" + inputData[0]+"&username=" + inputData[1]+"&password=" + inputData[2];
+            out.write(message.getBytes());
+            out.flush();
+            out.close();
+            is = conn.getInputStream();
+            int responseCode = conn.getResponseCode();
+            Log.i("log_tag", "POST Response Code :: " + responseCode);
         } catch (Exception e){
             Log.e("log_tag1", "CONNECTION FAILED in Registration Activity: " + e);
         }
