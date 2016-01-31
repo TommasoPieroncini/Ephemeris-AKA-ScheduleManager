@@ -423,7 +423,7 @@ class connectToMySql extends AsyncTask<List<String>, Void, ArrayList<String[]>> 
         String result = "";
 
         try {
-            URL url = new URL("http://128.61.104.186/ScheduleManager/retrieve_course_data.php");
+            URL url = new URL("http://128.61.62.62/ScheduleManager/retrieve_course_data.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             is = conn.getInputStream();
@@ -451,7 +451,7 @@ class connectToMySql extends AsyncTask<List<String>, Void, ArrayList<String[]>> 
             JSONArray jArray = new JSONArray(result);
             //Log.e("log_tag_json",jArray.toString());
 
-            for(int i = 0; i < jArray.length(); i++){
+            for(int i = 0; i < 20; i++){
                 for(int y = 1; y < 10; y++) {
                     JSONObject json = jArray.getJSONObject(i);
                     //Log.e("jsonObject", json.toString());

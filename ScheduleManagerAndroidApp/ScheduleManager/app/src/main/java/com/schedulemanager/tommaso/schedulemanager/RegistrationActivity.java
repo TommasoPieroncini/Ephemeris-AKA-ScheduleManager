@@ -128,7 +128,7 @@ class sendData extends AsyncTask<String,Void,String> {
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
         try {
-            URL url = new URL("http://128.61.104.186/ScheduleManager/schedman_registration.php");
+            URL url = new URL("http://128.61.62.62/ScheduleManager/schedman_registration.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);

@@ -162,9 +162,14 @@ public class scheduleGenerator {
 
         for (int i = 0; i < schedules3.size(); i++) {
             for (int j = 0; j < schedules3.get(i).length; j++) {
-                System.out.println(schedules3.get(i)[j]);
+                System.out.print(schedules3.get(i)[j]);
+                if(!(j == schedules3.get(i).length - 1)){
+                    System.out.print("?");
+                }
             }
-            System.out.println("__________");
+            if(!(i == schedules3.size()-1)){
+                System.out.println("__________");
+            }
         }
     }
 }
