@@ -66,6 +66,21 @@ public class Course {
                     if (other.getTime().equals(this.getTime())) {
                         return false;
                     }
+                    String othertimestart = other.getTime().substring(0, other.getTime().indexOf("-") );
+                    String othertimeend = other.getTime().substring(other.getTime().indexOf("-") + 1);
+                    String thistimestart = this.getTime().substring(0, this.getTime().indexOf("-"));
+                    String thistimeend = this.getTime().substring(this.getTime().indexOf("-") + 1);
+                    int ots = Integer.parseInt(othertimestart.substring(0,othertimestart.indexOf(":"))) * 100
+                            + Integer.parseInt(othertimestart.substring(othertimestart.indexOf(":") + 1));
+                    int ote = Integer.parseInt(othertimeend.substring(0,othertimeend.indexOf(":"))) * 100
+                            + Integer.parseInt(othertimeend.substring(othertimeend.indexOf(":") + 1));
+                    int tts = Integer.parseInt(thistimestart.substring(0,thistimestart.indexOf(":"))) * 100
+                            + Integer.parseInt(thistimestart.substring(thistimestart.indexOf(":") + 1));
+                    int tte = Integer.parseInt(thistimeend.substring(0,thistimeend.indexOf(":"))) * 100
+                            + Integer.parseInt(thistimeend.substring(thistimeend.indexOf(":") + 1));
+                    if (tts < ote && tts > ots || tte < ote && tte > ots) {
+                        return false;
+                    }
                 }
             }
         }

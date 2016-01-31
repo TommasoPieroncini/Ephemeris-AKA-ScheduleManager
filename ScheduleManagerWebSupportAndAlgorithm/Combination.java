@@ -1,22 +1,22 @@
 import java.util.ArrayList;
 
-/**
- * Created by David on 1/24/16.
- */
+
 public class Combination {
 
-    public int[][] combination(Course[]  elements, int K){
-        int [][] listoflists = new int[126][];
+    public static ArrayList<int[]> thelist = new ArrayList<int[]>();
+
+    public static void combination(int N, int K){
+
         // get the length of the array
         // e.g. for {'A','B','C','D'} => N = 4
-        int N = elements.length;
 
         if(K > N){
             System.out.println("Invalid input, K > N");
-            return null;
+            return;
         }
         // calculate the possible combinations
         // e.g. c(4,2)
+        //c(N,K);
 
         // get the combination by index
         // e.g. 01 --> AB , 23 --> CD
@@ -28,7 +28,6 @@ public class Combination {
         //  element ==>      A   |   B   |   C
         int r = 0;
         int index = 0;
-        int counter = 0;
 
         while(r >= 0){
             // possible indexes for 1st position "r=0" are "0,1,2" --> "A,B,C"
@@ -42,9 +41,12 @@ public class Combination {
                 if(r == K-1){
 
                     //do something with the combination e.g. add to list or print
+                    int[] combi = new int[K];
+                    for (int j = 0; j < combi.length; j++) {
+                        combi[j] = combination[j];
+                    }
+                    thelist.add(combi);
                     index++;
-                    listoflists[counter] = combination;
-                    counter++;
                 }
                 else{
                     // select index for next position
@@ -60,6 +62,5 @@ public class Combination {
                     index = combination[0]+1;
             }
         }
-        return listoflists;
     }
 }
